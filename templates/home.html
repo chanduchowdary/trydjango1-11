@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+{%block head_title%}home{%endblock head_title%}
+<p> {{html_var}} thing worksout</p>
+<p>
+	Random number is : {{num}}
+</p>
+
+<p>
+  {% if bool_val %}
+  random number is : {{ num }}
+  {%endif%}
+</p>
+<p>
+  {% for some_item in some_list %}
+    {%if some_item|divisibleby:2%}
+      evennumber
+    {%endif%}
+  {{some_item}} <br/>
+  {% endfor %}
+ </p>
+ <p> some_item is {{some_item}} </p>
+{% endblock content %}
