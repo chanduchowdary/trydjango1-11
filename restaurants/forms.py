@@ -1,3 +1,4 @@
+
 from django import forms
 
 from .models import RestaurantLocation
@@ -36,4 +37,4 @@ class RestaurantLocationCreateForm(forms.ModelForm):
     #     email = self.cleaned_data.get("email")
     #     if ".edu" in email:
     #         raise forms.ValidationError("We do not accept edu emails")
-	#     return email
+#     return email

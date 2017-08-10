@@ -12,8 +12,16 @@ def restaurant_createview(request):
     form = RestaurantLocationCreateForm(request.POST or None)
     errors = None
     if form.is_valid():
-        form.save()
-        return HttpResponseRedirect("/restaurants/")
+        if request.user.is_authenticated():
+            instance = form.save(commit=False)
+            # customize
+            # like a pre_save
+            instance.owner = request.user
+            instance.save()
+            # like a post_save
+            return HttpResponseRedirect("/restaurants/")
+        else:
+            return HttpResponseRedirect("/login/")
     if form.errors:
         errors = form.errors
            
@@ -54,16 +62,13 @@ class RestaurantListView(ListView):
 
 
 class RestaurantDetailView(DetailView):
-    queryset = RestaurantLocation.objects.all() #.filter(category__iexact='asian') # fitler by user
-    
-    # def get_object(self, *args, **kwargs):
-    #     rest_id = self.kwargs.get('rest_id')
-    #     obj = get_object_or_404(RestaurantLocation, id=rest_id) # pk = rest_id
-    #     return obj
-
-
+    queryset = RestaurantLocation.objects.all()
 class RestaurantCreateView(CreateView):
-    form_class = RestaurantLocationCreateForm
-    template_name = 'restaurants/form.html'
-    success_url = "/restaurants/"
-		
+	form_class = RestaurantLocationCreateForm
+	template_naem = 'restaurants/form.html'
+	success_url = "/restaurants/"
+
+	def form_valid(self,form):
+		instance = form.save(commit = False)
+		instance.owner = self.request.user
+		return super(RestaurantCreateView,self).form_valid
